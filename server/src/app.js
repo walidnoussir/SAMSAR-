@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import notFound from "./middlewares/notFound.middleware.js";
+import errorHandler from "./middlewares/error.middleware.js";
 
 const app = express();
 
@@ -30,5 +32,9 @@ app.get("/", (req, res) => {
     message: "Welcome to Samsar API 🚀",
   });
 });
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 export default app;
