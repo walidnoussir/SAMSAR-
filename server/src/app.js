@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import notFound from "./middlewares/notFound.middleware.js";
 import errorHandler from "./middlewares/error.middleware.js";
 
+import authRoutes from "./routes/auth.route.js";
+
 const app = express();
 
 /*
@@ -26,12 +28,7 @@ app.use(cookieParser());
 |--------------------------------------------------------------------------
 */
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Welcome to Samsar API 🚀",
-  });
-});
+app.use("/api/auth", authRoutes);
 
 app.use(notFound);
 
