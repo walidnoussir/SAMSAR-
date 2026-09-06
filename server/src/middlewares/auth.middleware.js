@@ -1,19 +1,33 @@
-import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 
-const validate = (req, res, next) => {
-  const errors = validationResult(req);
+const authenticate = (req, res, next) => {
+  try {
+    // Get JWT from HttpOnly cookie
+    const token = req.cookies?.accessToken;
 
-  if (errors.isEmpty()) {
-    return next();
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    // Verify JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Attach authenticated user to request
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+    };
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
+    });
   }
-
-  return res.status(400).json({
-    success: false,
-    errors: errors.array().map((error) => ({
-      field: error.path,
-      message: error.msg,
-    })),
-  });
 };
 
-export default validate;
+export default authenticate;
