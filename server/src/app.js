@@ -5,6 +5,7 @@ import notFound from "./middlewares/notFound.middleware.js";
 import errorHandler from "./middlewares/error.middleware.js";
 
 import authRoutes from "./routes/auth.route.js";
+import propertyRoutes from "./routes/property.route.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 */
 
 app.use("/api/auth", authRoutes);
+app.use("/api/properties", propertyRoutes);
 
 app.use(notFound);
 
