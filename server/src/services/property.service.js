@@ -22,7 +22,7 @@ export const createProperty = async (propertyData, ownerId) => {
 */
 
 export const getAllProperties = async (filters = {}) => {
-  const { city } = filters;
+  const { city, propertyType } = filters;
 
   const query = {};
 
@@ -32,6 +32,11 @@ export const getAllProperties = async (filters = {}) => {
       $regex: city,
       $options: "i",
     };
+  }
+
+  // filter by property type
+  if (propertyType) {
+    query.propertyType = propertyType;
   }
 
   const properties = await Property.find(query)
