@@ -1,4 +1,4 @@
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 
 export const createPropertyValidation = [
   body("title")
@@ -67,4 +67,67 @@ export const updatePropertyValidation = [
 
 export const propertyIdValidation = [
   param("id").isMongoId().withMessage("Invalid property ID"),
+];
+
+export const propertyFilterValidation = [
+  query("city")
+    .optional()
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("City must be at least 2 characters"),
+
+  query("propertyType")
+    .optional()
+    .isIn(["Apartment", "House", "Studio", "Villa", "Room"])
+    .withMessage("Invalid property type"),
+
+  query("minPrice")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Minimum price must be a positive number"),
+
+  query("maxPrice")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Maximum price must be a positive number"),
+
+  query("bedrooms")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Bedrooms must be a positive integer"),
+
+  query("bathrooms")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Bathrooms must be a positive integer"),
+
+  query("minSurface")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Minimum surface must be a positive number"),
+
+  query("maxSurface")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Maximum surface must be a positive number"),
+
+  query("status")
+    .optional()
+    .isIn(["available", "rented"])
+    .withMessage("Invalid property status"),
+
+  query("sort")
+    .optional()
+    .isIn(["newest", "priceAsc", "priceDesc"])
+    .withMessage("Invalid sort option"),
+
+  query("page")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Page must be at least 1"),
+
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage("Limit must be between 1 and 100"),
 ];

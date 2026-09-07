@@ -12,6 +12,15 @@ import {
 import authMiddleware from "../middlewares/auth.middleware.js";
 import authorize from "../middlewares/role.middleware.js";
 
+import {
+  createPropertyValidation,
+  updatePropertyValidation,
+  propertyIdValidation,
+  propertyFilterValidation,
+} from "../validations/property.validation.js";
+
+import validate from "../middlewares/validation.middleware.js";
+
 const router = express.Router();
 
 /*
@@ -20,14 +29,14 @@ const router = express.Router();
 |--------------------------------------------------------------------------
 */
 
-// Get all properties
-router.get("/", getAllProperties);
+// Get all properties + filters + pagination
+router.get("/", propertyFilterValidation, validate, getAllProperties);
 
 // Get my properties
 router.get("/my", authMiddleware, authorize("Owner"), getMyProperties);
 
 // Get property by ID
-router.get("/:id", getPropertyById);
+router.get("/:id", propertyIdValidation, validate, getPropertyById);
 
 /*
 |--------------------------------------------------------------------------
@@ -36,12 +45,33 @@ router.get("/:id", getPropertyById);
 */
 
 // Create property
-router.post("/", authMiddleware, authorize("Owner"), createProperty);
+router.post(
+  "/",
+  authMiddleware,
+  authorize("Owner"),
+  createPropertyValidation,
+  validate,
+  createProperty,
+);
 
 // Update property
-router.put("/:id", authMiddleware, authorize("Owner"), updateProperty);
+router.put(
+  "/:id",
+  authMiddleware,
+  authorize("Owner"),
+  updatePropertyValidation,
+  validate,
+  updateProperty,
+);
 
 // Delete property
-router.delete("/:id", authMiddleware, authorize("Owner"), deleteProperty);
+router.delete(
+  "/:id",
+  authMiddleware,
+  authorize("Owner"),
+  propertyIdValidation,
+  validate,
+  deleteProperty,
+);
 
 export default router;
