@@ -32,6 +32,9 @@ export const getAllProperties = async (filters = {}) => {
     minSurface,
     maxSurface,
     status,
+    sort,
+    page,
+    limit,
   } = filters;
 
   const query = {};
@@ -89,11 +92,44 @@ export const getAllProperties = async (filters = {}) => {
     query.status = status;
   }
 
+  //===========================// Sorting //============================//
+  let sortOption = { createdAt: -1 };
+
+  if (sort === "priceAsc") {
+    sortOption = { price: 1 };
+  }
+
+  if (sort === "priceDesc") {
+    sortOption = { price: -1 };
+  }
+
+  if (sort === "newest") {
+    sortOption = { createdAt: -1 };
+  }
+
+  //=============================Pagination==========================//
+  const pageNumber = Number(page) || 1;
+  const limitNumber = Number(limit) || 10;
+
+  const skip = (pageNumber - 1) * limitNumber;
+
   const properties = await Property.find(query)
     .populate("owner", "firstName lastName email")
-    .sort({ createdAt: -1 });
+    .sort(sortOption)
+    .skip(skip)
+    .limit(limitNumber);
 
-  return properties;
+  const total = await Property.countDocuments(query);
+
+  return {
+    properties,
+    pagination: {
+      total,
+      page: pageNumber,
+      limit: limitNumber,
+      totalPages: Math.ceil(total / limitNumber),
+    },
+  };
 };
 
 /*
