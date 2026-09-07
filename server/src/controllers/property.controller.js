@@ -31,7 +31,7 @@ export const createProperty = async (req, res, next) => {
 
 export const getAllProperties = async (req, res, next) => {
   try {
-    const properties = await propertyService.getAllProperties();
+    const properties = await propertyService.getAllProperties(req.query);
 
     res.status(200).json({
       success: true,

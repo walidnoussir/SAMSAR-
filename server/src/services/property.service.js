@@ -21,8 +21,20 @@ export const createProperty = async (propertyData, ownerId) => {
 |--------------------------------------------------------------------------
 */
 
-export const getAllProperties = async () => {
-  const properties = await Property.find()
+export const getAllProperties = async (filters = {}) => {
+  const { city } = filters;
+
+  const query = {};
+
+  // Search by city
+  if (city) {
+    query["location.city"] = {
+      $regex: city,
+      $options: "i",
+    };
+  }
+
+  const properties = await Property.find(query)
     .populate("owner", "firstName lastName email")
     .sort({ createdAt: -1 });
 
