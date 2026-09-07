@@ -22,7 +22,7 @@ export const createProperty = async (propertyData, ownerId) => {
 */
 
 export const getAllProperties = async (filters = {}) => {
-  const { city, propertyType } = filters;
+  const { city, propertyType, minPrice, maxPrice } = filters;
 
   const query = {};
 
@@ -37,6 +37,19 @@ export const getAllProperties = async (filters = {}) => {
   // filter by property type
   if (propertyType) {
     query.propertyType = propertyType;
+  }
+
+  // filter by price
+  if (minPrice || maxPrice) {
+    query.price = {};
+
+    if (minPrice) {
+      query.price.$gte = Number(minPrice);
+    }
+
+    if (maxPrice) {
+      query.price.$lte = Number(maxPrice);
+    }
   }
 
   const properties = await Property.find(query)
