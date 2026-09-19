@@ -72,3 +72,22 @@ export const logout = (req, res) => {
     message: "Logout successful",
   });
 };
+
+/*
+|--------------------------------------------------------------------------
+| Get Current User
+|--------------------------------------------------------------------------
+*/
+
+export const getMe = async (req, res, next) => {
+  try {
+    const user = await authService.getMe(req.user.id);
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -60,3 +60,15 @@ export const loginUser = async (email, password) => {
     user,
   };
 };
+
+// Get current user
+
+export const getMe = async (userId) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
