@@ -31,12 +31,15 @@ export const createProperty = async (req, res, next) => {
 
 export const getAllProperties = async (req, res, next) => {
   try {
-    const properties = await propertyService.getAllProperties(req.query);
+    const { properties, pagination } = await propertyService.getAllProperties(
+      req.query,
+    );
 
     res.status(200).json({
       success: true,
       count: properties.length,
       properties,
+      pagination,
     });
   } catch (error) {
     next(error);
