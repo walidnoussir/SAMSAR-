@@ -118,7 +118,9 @@ const Navbar = () => {
                 {/* User Dropdown */}
                 <div className="relative">
                   <button
-                    onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                    onClick={() =>
+                      setIsProfileDropdownOpen(!isProfileDropdownOpen)
+                    }
                     className="flex items-center gap-2 p-1.5 rounded-full border border-border hover:border-primary/50 transition-colors focus:outline-none"
                   >
                     <div className="w-8 h-8 rounded-full bg-primary-light text-primary flex items-center justify-center font-semibold text-xs overflow-hidden">
@@ -145,7 +147,9 @@ const Navbar = () => {
                   {isProfileDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-surface rounded-2xl shadow-xl border border-border py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                       <div className="px-4 py-2.5 border-b border-border/60">
-                        <p className="text-xs text-text-secondary font-medium">Signed in as</p>
+                        <p className="text-xs text-text-secondary font-medium">
+                          Signed in as
+                        </p>
                         <p className="text-sm font-semibold text-text-main truncate">
                           {user?.firstName} {user?.lastName}
                         </p>
@@ -255,7 +259,11 @@ const Navbar = () => {
               className="p-2 rounded-xl text-text-main hover:bg-black/5 focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>

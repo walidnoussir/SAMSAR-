@@ -7,19 +7,20 @@
 */
 
 @theme {
-  --color-primary: #2F7D6D;
-  --color-primary-dark: #245E54;
-  --color-primary-light: #DCEFEA;
-  --color-accent: #F4A261;
-  --color-background: #FAF9F6;
-  --color-surface: #FFFFFF;
+  --color-primary: #2f7d6d;
+  --color-primary-dark: #245e54;
+  --color-primary-light: #dcefea;
+  --color-accent: #f4a261;
+  --color-background: #faf9f6;
+  --color-surface: #ffffff;
   --color-text-main: #263238;
   --color-text-secondary: #718096;
-  --color-border: #E5E7EB;
-  --color-success: #4CAF7D;
-  --color-error: #E57373;
+  --color-border: #e5e7eb;
+  --color-success: #4caf7d;
+  --color-error: #e57373;
 
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans:
+    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 /*
@@ -45,14 +46,19 @@ body {
 |--------------------------------------------------------------------------
 */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply text-text-main font-semibold;
 }
 
-a {
-  @apply text-primary hover:text-primary-dark transition-colors;
+/* a {
+  @apply hover:text-primary-dark transition-colors;
   text-decoration: none;
-}
+} */
 
 /*
 |--------------------------------------------------------------------------
