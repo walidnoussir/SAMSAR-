@@ -30,6 +30,7 @@ import PropertyReservations from "./pages/owner/PropertyReservations";
 
 // Common
 import NotFound from "./pages/NotFound";
+import PublicOnlyRoute from "./components/PublicOnlyRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,8 +51,22 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/properties/:id" element={<PropertyDetails />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <PublicOnlyRoute>
+              <Login />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicOnlyRoute>
+              <Register />
+            </PublicOnlyRoute>
+          }
+        />
 
         {/* User Routes */}
         <Route
@@ -88,7 +103,10 @@ function App() {
         <Route path="properties" element={<MyProperties />} />
         <Route path="properties/new" element={<CreateProperty />} />
         <Route path="properties/:id/edit" element={<EditProperty />} />
-        <Route path="properties/:id/reservations" element={<PropertyReservations />} />
+        <Route
+          path="properties/:id/reservations"
+          element={<PropertyReservations />}
+        />
       </Route>
     </Routes>
   );
