@@ -1,8 +1,8 @@
-import dotenv from "dotenv";
+// Load environment variables before any other module (e.g. the Cloudinary
+// config) is imported, since those read process.env at module-evaluation time.
+import "dotenv/config";
 import app from "./app.js";
 import connectDB from "./config/db.js";
-
-dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 

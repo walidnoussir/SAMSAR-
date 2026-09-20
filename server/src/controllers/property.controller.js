@@ -1,4 +1,52 @@
 import * as propertyService from "../services/property.service.js";
+import cloudinary from "../config/cloudinary.js";
+
+/*
+|--------------------------------------------------------------------------
+| Upload Property Images
+|--------------------------------------------------------------------------
+|
+| Receives image files from multer (memory storage), streams each one to
+| Cloudinary and returns the hosted secure URLs.
+|--------------------------------------------------------------------------
+*/
+
+const uploadToCloudinary = (file) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "samsar/properties",
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      },
+    );
+
+    stream.end(file.buffer);
+  });
+
+export const uploadPropertyImages = async (req, res, next) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select at least one image to upload",
+      });
+    }
+
+    const urls = await Promise.all(req.files.map(uploadToCloudinary));
+
+    res.status(200).json({
+      success: true,
+      message: "Images uploaded successfully",
+      urls,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /*
 |--------------------------------------------------------------------------
