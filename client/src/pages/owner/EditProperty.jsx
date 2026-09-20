@@ -5,8 +5,6 @@ import {
   Building2,
   MapPin,
   Image as ImageIcon,
-  Plus,
-  Trash2,
   ArrowLeft,
   Loader2,
   Save,
@@ -14,7 +12,9 @@ import {
 import {
   getPropertyById,
   updateProperty,
+  uploadPropertyImages,
 } from "../../features/properties/propertyThunks";
+import PropertyImageUploader from "../../components/PropertyImageUploader";
 import toast from "react-hot-toast";
 
 const EditProperty = () => {
@@ -37,10 +37,9 @@ const EditProperty = () => {
     bedrooms: 2,
     bathrooms: 1,
     surface: 80,
-    images: [],
   });
 
-  const [imageUrlInput, setImageUrlInput] = useState("");
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -63,8 +62,15 @@ const EditProperty = () => {
         bedrooms: property.bedrooms || 0,
         bathrooms: property.bathrooms || 0,
         surface: property.surface || 0,
-        images: property.images || [],
       });
+
+      setImages(
+        (property.images || []).map((url) => ({
+          id: url,
+          url,
+          file: null,
+        })),
+      );
     }
   }, [property, id]);
 
@@ -76,28 +82,23 @@ const EditProperty = () => {
     }));
   };
 
-  const handleAddImage = (e) => {
-    e.preventDefault();
-    if (!imageUrlInput.trim()) return;
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, imageUrlInput.trim()],
-    }));
-    setImageUrlInput("");
-  };
-
-  const handleRemoveImage = (indexToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, idx) => idx !== indexToRemove),
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     try {
+      const filesToUpload = images
+        .filter((image) => image.file)
+        .map((image) => image.file);
+
+      const existingImages = images
+        .filter((image) => !image.file)
+        .map((image) => image.url);
+
+      const uploadedImages = filesToUpload.length
+        ? await dispatch(uploadPropertyImages(filesToUpload)).unwrap()
+        : [];
+
       const payload = {
         title: formData.title,
         description: formData.description,
@@ -113,7 +114,7 @@ const EditProperty = () => {
         bedrooms: Number(formData.bedrooms),
         bathrooms: Number(formData.bathrooms),
         surface: Number(formData.surface),
-        images: formData.images,
+        images: [...existingImages, ...uploadedImages],
       };
 
       await dispatch(updateProperty({ id, propertyData: payload })).unwrap();
@@ -340,45 +341,11 @@ const EditProperty = () => {
             <span>Property Photography</span>
           </h2>
 
-          <div className="flex gap-2">
-            <input
-              type="url"
-              value={imageUrlInput}
-              onChange={(e) => setImageUrlInput(e.target.value)}
-              placeholder="Add image URL (https://...)"
-              className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-text-main focus:bg-surface focus:border-primary focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={handleAddImage}
-              className="px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold flex items-center gap-1.5"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {formData.images.map((imgUrl, idx) => (
-              <div
-                key={idx}
-                className="relative aspect-video rounded-2xl overflow-hidden border border-border group bg-slate-100"
-              >
-                <img
-                  src={imgUrl}
-                  alt={`Property ${idx + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(idx)}
-                  className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 text-white hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
+          <PropertyImageUploader
+            value={images}
+            onChange={setImages}
+            disabled={loading}
+          />
         </div>
 
         {/* Submit */}

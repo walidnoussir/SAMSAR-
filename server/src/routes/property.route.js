@@ -7,10 +7,12 @@ import {
   getMyProperties,
   updateProperty,
   deleteProperty,
+  uploadPropertyImages,
 } from "../controllers/property.controller.js";
 
 import authMiddleware from "../middlewares/auth.middleware.js";
 import authorize from "../middlewares/role.middleware.js";
+import upload from "../middlewares/upload.middleware.js";
 
 import {
   createPropertyValidation,
@@ -43,6 +45,15 @@ router.get("/:id", propertyIdValidation, validate, getPropertyById);
 | Owner Routes
 |--------------------------------------------------------------------------
 */
+
+// Upload property images to Cloudinary
+router.post(
+  "/upload",
+  authMiddleware,
+  authorize("Owner"),
+  upload.array("images", 8),
+  uploadPropertyImages,
+);
 
 // Create property
 router.post(

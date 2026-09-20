@@ -57,6 +57,26 @@ export const createProperty = createAsyncThunk(
   },
 );
 
+export const uploadPropertyImages = createAsyncThunk(
+  "properties/uploadImages",
+  async (files, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      files.forEach((file) => formData.append("images", file));
+
+      const { data } = await api.post("/properties/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      return data.urls;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to upload images",
+      );
+    }
+  },
+);
+
 export const updateProperty = createAsyncThunk(
   "properties/update",
   async ({ id, propertyData }, { rejectWithValue }) => {

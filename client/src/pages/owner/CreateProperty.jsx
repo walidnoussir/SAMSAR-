@@ -5,12 +5,14 @@ import {
   Building2,
   MapPin,
   Image as ImageIcon,
-  Plus,
-  Trash2,
   ArrowLeft,
   Loader2,
 } from "lucide-react";
-import { createProperty } from "../../features/properties/propertyThunks";
+import {
+  createProperty,
+  uploadPropertyImages,
+} from "../../features/properties/propertyThunks";
+import PropertyImageUploader from "../../components/PropertyImageUploader";
 import toast from "react-hot-toast";
 
 const CITIES_COORDINATES = {
@@ -38,12 +40,9 @@ const CreateProperty = () => {
     bedrooms: "2",
     bathrooms: "1",
     surface: "80",
-    images: [
-      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80",
-    ],
   });
 
-  const [imageUrlInput, setImageUrlInput] = useState("");
+  const [images, setImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,23 +61,6 @@ const CreateProperty = () => {
     }
   };
 
-  const handleAddImage = (e) => {
-    e.preventDefault();
-    if (!imageUrlInput.trim()) return;
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, imageUrlInput.trim()],
-    }));
-    setImageUrlInput("");
-  };
-
-  const handleRemoveImage = (indexToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, idx) => idx !== indexToRemove),
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -87,8 +69,17 @@ const CreateProperty = () => {
       return;
     }
 
+    if (images.length === 0) {
+      toast.error("Please upload at least one property image");
+      return;
+    }
+
     setLoading(true);
     try {
+      const uploadedImages = await dispatch(
+        uploadPropertyImages(images.map((image) => image.file)),
+      ).unwrap();
+
       const payload = {
         title: formData.title,
         description: formData.description,
@@ -103,7 +94,7 @@ const CreateProperty = () => {
         bedrooms: Number(formData.bedrooms),
         bathrooms: Number(formData.bathrooms),
         surface: Number(formData.surface),
-        images: formData.images,
+        images: uploadedImages,
         status: "available",
       };
 
@@ -318,53 +309,11 @@ const CreateProperty = () => {
             <span>Property Photography</span>
           </h2>
 
-          {/* Add image URL bar */}
-          <div className="flex gap-2">
-            <input
-              type="url"
-              value={imageUrlInput}
-              onChange={(e) => setImageUrlInput(e.target.value)}
-              placeholder="Paste image URL (https://...)"
-              className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-text-main focus:bg-surface focus:border-primary focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={handleAddImage}
-              className="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Image</span>
-            </button>
-          </div>
-
-          {/* Images Grid preview */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {formData.images.map((imgUrl, idx) => (
-              <div
-                key={idx}
-                className="relative aspect-video rounded-2xl overflow-hidden border border-border group bg-slate-100"
-              >
-                <img
-                  src={imgUrl}
-                  alt={`Upload ${idx + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(idx)}
-                  className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 text-white hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
-                  title="Remove image"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-                {idx === 0 && (
-                  <span className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded text-[10px] font-bold bg-primary text-white">
-                    Cover
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
+          <PropertyImageUploader
+            value={images}
+            onChange={setImages}
+            disabled={loading}
+          />
         </div>
 
         {/* Submit action */}
