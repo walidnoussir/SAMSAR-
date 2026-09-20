@@ -16,6 +16,7 @@ import {
 import { getProperties } from "../features/properties/propertyThunks";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
+import { getFavorites } from "../features/favorites/favoriteThunks";
 
 const POPULAR_CITIES = [
   "All Morocco",
@@ -35,7 +36,9 @@ const Properties = () => {
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid"); // 'grid' | 'list' | 'map'
-  const [searchInput, setSearchInput] = useState(searchParams.get("city") || "");
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("city") || "",
+  );
 
   // Read current filters from URL params
   const currentFilters = {
@@ -127,7 +130,9 @@ const Properties = () => {
             Home
           </Link>
           <span>/</span>
-          <span className="text-text-main font-medium">Properties for Rent in Morocco</span>
+          <span className="text-text-main font-medium">
+            Properties for Rent in Morocco
+          </span>
         </div>
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-text-main">
           Find your next home in Morocco
@@ -224,7 +229,9 @@ const Properties = () => {
             {/* Total Results Count */}
             <div>
               <span className="text-lg font-bold text-text-main">
-                {pagination?.total !== undefined ? pagination.total : properties.length}{" "}
+                {pagination?.total !== undefined
+                  ? pagination.total
+                  : properties.length}{" "}
                 properties available for rent
               </span>
               {currentFilters.city && (
@@ -298,13 +305,17 @@ const Properties = () => {
           {/* Active Filters Tag Pills Row */}
           {activeFilterCount > 0 && (
             <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="text-text-secondary font-medium">Active filters:</span>
+              <span className="text-text-secondary font-medium">
+                Active filters:
+              </span>
 
               {currentFilters.city && (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-light/50 text-primary-dark font-medium border border-primary/20">
                   {currentFilters.city}
                   <button
-                    onClick={() => updateFilters({ ...currentFilters, city: "", page: 1 })}
+                    onClick={() =>
+                      updateFilters({ ...currentFilters, city: "", page: 1 })
+                    }
                     className="hover:text-error"
                   >
                     <X className="w-3 h-3" />
@@ -317,7 +328,11 @@ const Properties = () => {
                   {currentFilters.propertyType}
                   <button
                     onClick={() =>
-                      updateFilters({ ...currentFilters, propertyType: "", page: 1 })
+                      updateFilters({
+                        ...currentFilters,
+                        propertyType: "",
+                        page: 1,
+                      })
                     }
                     className="hover:text-error"
                   >
@@ -328,7 +343,8 @@ const Properties = () => {
 
               {(currentFilters.minPrice || currentFilters.maxPrice) && (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-light/50 text-primary-dark font-medium border border-primary/20">
-                  Price: {currentFilters.minPrice || "0"} - {currentFilters.maxPrice || "Any"} MAD
+                  Price: {currentFilters.minPrice || "0"} -{" "}
+                  {currentFilters.maxPrice || "Any"} MAD
                   <button
                     onClick={() =>
                       updateFilters({
@@ -350,7 +366,11 @@ const Properties = () => {
                   {currentFilters.bedrooms}+ Beds
                   <button
                     onClick={() =>
-                      updateFilters({ ...currentFilters, bedrooms: "", page: 1 })
+                      updateFilters({
+                        ...currentFilters,
+                        bedrooms: "",
+                        page: 1,
+                      })
                     }
                     className="hover:text-error"
                   >
@@ -419,10 +439,12 @@ const Properties = () => {
               <div className="w-16 h-16 rounded-3xl bg-primary-light text-primary flex items-center justify-center mx-auto">
                 <Building2 className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-text-main">No properties found</h3>
+              <h3 className="text-xl font-bold text-text-main">
+                No properties found
+              </h3>
               <p className="text-sm text-text-secondary max-w-md mx-auto">
-                We couldn't find any rentals matching your search criteria. Try removing some
-                filters or search in another city.
+                We couldn't find any rentals matching your search criteria. Try
+                removing some filters or search in another city.
               </p>
               <button
                 type="button"
@@ -518,13 +540,16 @@ const Properties = () => {
                   Looking for something specific in Morocco?
                 </h4>
                 <p className="text-xs text-text-secondary">
-                  Save your search alerts to receive notifications for new matching listings.
+                  Save your search alerts to receive notifications for new
+                  matching listings.
                 </p>
               </div>
             </div>
             <button
               type="button"
-              onClick={() => alert("Search alert saved! You will receive updates.")}
+              onClick={() =>
+                alert("Search alert saved! You will receive updates.")
+              }
               className="px-4 py-2.5 rounded-xl border border-primary text-primary font-semibold text-xs bg-surface hover:bg-primary hover:text-white transition-colors shrink-0 cursor-pointer shadow-xs"
             >
               Save Search Alert

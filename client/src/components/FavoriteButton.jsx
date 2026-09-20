@@ -2,10 +2,18 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Heart, Loader2 } from "lucide-react";
-import { addFavorite, removeFavorite } from "../features/favorites/favoriteThunks";
+import {
+  addFavorite,
+  removeFavorite,
+} from "../features/favorites/favoriteThunks";
 import toast from "react-hot-toast";
 
-const FavoriteButton = ({ propertyId, className = "", iconSize = "w-5 h-5", showBg = true }) => {
+const FavoriteButton = ({
+  propertyId,
+  className = "",
+  iconSize = "w-5 h-5",
+  showBg = true,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -63,9 +71,13 @@ const FavoriteButton = ({ propertyId, className = "", iconSize = "w-5 h-5", show
       {loading ? (
         <Loader2 className={`${iconSize} text-primary animate-spin`} />
       ) : isFavorited ? (
-        <Heart className={`${iconSize} fill-error text-error transition-transform scale-110`} />
+        <Heart
+          className={`${iconSize} fill-error text-error transition-transform scale-110`}
+        />
       ) : (
-        <Heart className={`${iconSize} text-text-main/80 hover:text-error transition-colors`} />
+        <Heart
+          className={`${iconSize} text-text-main/80 hover:text-error transition-colors`}
+        />
       )}
     </button>
   );

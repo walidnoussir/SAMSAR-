@@ -31,6 +31,7 @@ import PropertyReservations from "./pages/owner/PropertyReservations";
 // Common
 import NotFound from "./pages/NotFound";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
+import { getFavorites } from "./features/favorites/favoriteThunks";
 
 function App() {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getMe());
+    dispatch(getFavorites());
   }, [dispatch]);
 
   if (!initialized) {

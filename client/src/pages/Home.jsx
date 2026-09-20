@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getProperties } from "../features/properties/propertyThunks";
 import PropertyCard from "../components/PropertyCard";
+import { getFavorites } from "../features/favorites/favoriteThunks";
 
 const CITIES = [
   {
@@ -101,7 +102,8 @@ const Home = () => {
 
             <p className="text-base sm:text-lg text-text-secondary max-w-xl leading-relaxed">
               Discover comfortable homes and apartments for rent across Morocco.
-              Verified direct owners, honest pricing in MAD, and zero booking friction.
+              Verified direct owners, honest pricing in MAD, and zero booking
+              friction.
             </p>
 
             {/* Quick Metrics */}
@@ -110,19 +112,25 @@ const Home = () => {
                 <span className="text-2xl sm:text-3xl font-bold text-text-main block">
                   1,450+
                 </span>
-                <span className="text-xs text-text-secondary">Verified Homes</span>
+                <span className="text-xs text-text-secondary">
+                  Verified Homes
+                </span>
               </div>
               <div>
                 <span className="text-2xl sm:text-3xl font-bold text-text-main block">
                   5 Cities
                 </span>
-                <span className="text-xs text-text-secondary">Kingdom-Wide</span>
+                <span className="text-xs text-text-secondary">
+                  Kingdom-Wide
+                </span>
               </div>
               <div>
                 <span className="text-2xl sm:text-3xl font-bold text-primary block">
                   0% Fee
                 </span>
-                <span className="text-xs text-text-secondary">No Broker Markups</span>
+                <span className="text-xs text-text-secondary">
+                  No Broker Markups
+                </span>
               </div>
             </div>
 
@@ -225,13 +233,19 @@ const Home = () => {
                   {[1, 2, 3, 4, 5].map((s) => (
                     <Star key={s} className="w-3.5 h-3.5 fill-accent" />
                   ))}
-                  <span className="text-xs font-bold text-text-main ml-1">5.0</span>
+                  <span className="text-xs font-bold text-text-main ml-1">
+                    5.0
+                  </span>
                 </div>
                 <p className="text-xs text-text-main font-medium italic">
-                  "Transparent, safe, and found my rental Riad in Gueliz in under 48 hours."
+                  "Transparent, safe, and found my rental Riad in Gueliz in
+                  under 48 hours."
                 </p>
                 <p className="text-[11px] text-text-secondary">
-                  Yassine B. — <span className="text-primary font-semibold">Verified Tenant</span>
+                  Yassine B. —{" "}
+                  <span className="text-primary font-semibold">
+                    Verified Tenant
+                  </span>
                 </p>
               </div>
             </div>
@@ -345,7 +359,9 @@ const Home = () => {
           </div>
         ) : properties.length === 0 ? (
           <div className="p-12 text-center bg-surface rounded-3xl border border-border space-y-3">
-            <p className="text-text-secondary text-sm">No properties listed yet.</p>
+            <p className="text-text-secondary text-sm">
+              No properties listed yet.
+            </p>
             <Link
               to="/properties"
               className="inline-block text-xs font-bold text-primary"
@@ -372,8 +388,8 @@ const Home = () => {
             Why choose Samsar?
           </h2>
           <p className="text-sm text-text-secondary mt-2">
-            We combine local residential nuance with modern digital standards to make renting
-            in Morocco swift, direct, and straightforward.
+            We combine local residential nuance with modern digital standards to
+            make renting in Morocco swift, direct, and straightforward.
           </p>
         </div>
 
@@ -383,10 +399,12 @@ const Home = () => {
             <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-text-main">Verified Property Listings</h3>
+            <h3 className="text-base font-bold text-text-main">
+              Verified Property Listings
+            </h3>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Every listing is reviewed and documentation is checked for absolute peace of
-              mind before reservation.
+              Every listing is reviewed and documentation is checked for
+              absolute peace of mind before reservation.
             </p>
           </div>
 
@@ -395,10 +413,12 @@ const Home = () => {
             <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
               <span className="text-lg font-bold text-primary">MAD</span>
             </div>
-            <h3 className="text-base font-bold text-text-main">Transparent MAD Pricing</h3>
+            <h3 className="text-base font-bold text-text-main">
+              Transparent MAD Pricing
+            </h3>
             <p className="text-xs text-text-secondary leading-relaxed">
-              No arbitrary intermediary markups or unexpected fees. Direct owner rates
-              stipulated clearly upfront.
+              No arbitrary intermediary markups or unexpected fees. Direct owner
+              rates stipulated clearly upfront.
             </p>
           </div>
 
@@ -407,10 +427,12 @@ const Home = () => {
             <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
               <Key className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-text-main">Direct Owner Reservations</h3>
+            <h3 className="text-base font-bold text-text-main">
+              Direct Owner Reservations
+            </h3>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Message verified property hosts directly, schedule private visits, and secure your
-              next rental in minutes.
+              Message verified property hosts directly, schedule private visits,
+              and secure your next rental in minutes.
             </p>
           </div>
 
@@ -419,10 +441,12 @@ const Home = () => {
             <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
               <Compass className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-text-main">Interactive Map Search</h3>
+            <h3 className="text-base font-bold text-text-main">
+              Interactive Map Search
+            </h3>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Explore nearby tramway stops, local souks, international schools, cafés, and beach
-              access with visual precision.
+              Explore nearby tramway stops, local souks, international schools,
+              cafés, and beach access with visual precision.
             </p>
           </div>
         </div>
@@ -443,8 +467,8 @@ const Home = () => {
               Your next home is waiting.
             </h2>
             <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-xl">
-              Join thousands of tenants and verified Moroccan property owners. Fast,
-              transparent, and built with genuine local hospitality.
+              Join thousands of tenants and verified Moroccan property owners.
+              Fast, transparent, and built with genuine local hospitality.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
               <Link
