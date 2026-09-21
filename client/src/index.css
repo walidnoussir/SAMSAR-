@@ -55,10 +55,27 @@ h6 {
   @apply text-text-main font-semibold;
 }
 
-/* a {
-  @apply hover:text-primary-dark transition-colors;
-  text-decoration: none;
-} */
+/*
+|--------------------------------------------------------------------------
+| Primary Buttons & Badges Contrast Rule
+|--------------------------------------------------------------------------
+| Guarantees clear, high-contrast white text on all emerald/primary buttons
+*/
+
+button[class*="bg-primary"]:not([class*="bg-primary-light"]),
+a[class*="bg-primary"]:not([class*="bg-primary-light"]),
+button.bg-primary,
+a.bg-primary,
+button.bg-primary-dark,
+a.bg-primary-dark {
+  color: #ffffff !important;
+}
+
+button[class*="bg-primary"]:not([class*="bg-primary-light"]) *,
+a[class*="bg-primary"]:not([class*="bg-primary-light"]) * {
+  color: inherit;
+}
+
 
 /*
 |--------------------------------------------------------------------------
