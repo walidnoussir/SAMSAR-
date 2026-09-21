@@ -55,11 +55,30 @@ router.post(
   uploadPropertyImages,
 );
 
-// Create property
+// Middleware to parse JSON strings from multipart/form-data if submitted directly
+const parseMultipartJson = (req, res, next) => {
+  if (typeof req.body.location === "string") {
+    try {
+      req.body.location = JSON.parse(req.body.location);
+    } catch (_) {}
+  }
+  if (typeof req.body.images === "string") {
+    try {
+      req.body.images = JSON.parse(req.body.images);
+    } catch (_) {
+      req.body.images = [req.body.images];
+    }
+  }
+  next();
+};
+
+// Create property (supports both JSON with pre-uploaded Cloudinary URLs and direct multipart uploads)
 router.post(
   "/",
   authMiddleware,
   authorize("Owner"),
+  upload.array("images", 8),
+  parseMultipartJson,
   createPropertyValidation,
   validate,
   createProperty,

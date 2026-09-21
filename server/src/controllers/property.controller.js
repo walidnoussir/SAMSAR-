@@ -56,6 +56,13 @@ export const uploadPropertyImages = async (req, res, next) => {
 
 export const createProperty = async (req, res, next) => {
   try {
+    // If files were provided via direct multipart form submission
+    if (req.files && req.files.length > 0) {
+      const uploadedUrls = await Promise.all(req.files.map(uploadToCloudinary));
+      const existingImages = Array.isArray(req.body.images) ? req.body.images : [];
+      req.body.images = [...existingImages, ...uploadedUrls];
+    }
+
     const property = await propertyService.createProperty(
       req.body,
       req.user.id,
