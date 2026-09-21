@@ -21,6 +21,48 @@ export const createProperty = async (propertyData, ownerId) => {
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| Moroccan City Accent-Insensitive Regex Builder
+|--------------------------------------------------------------------------
+| Allows queries like "Beni Mellal" to match "Béni Mellal", "Kenitra" to
+| match "Kénitra", and handles common transliterations like Fez / Fès.
+|--------------------------------------------------------------------------
+*/
+const buildAccentInsensitiveRegex = (text) => {
+  if (!text) return "";
+  let pattern = text.trim();
+
+  // Handle known Moroccan city transliterations before char expansion
+  if (/^f[eéèêë][sz]$/i.test(pattern)) {
+    return "F[eéèêë][sz]";
+  }
+  if (/^marrak[ec]sh?$/i.test(pattern)) {
+    return "Marrak[ec]sh?";
+  }
+
+  // Escape special regex characters except for word boundaries
+  pattern = pattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+
+  // Map letters to character classes matching accented variants
+  const charMap = {
+    a: "[aàâäáAÀÂÄÁ]",
+    e: "[eéèêëEÉÈÊË]",
+    i: "[iîïíIÎÏÍ]",
+    o: "[oôöóOÔÖÓ]",
+    u: "[uùûüúUÙÛÜÚ]",
+    c: "[cçCÇ]",
+  };
+
+  return pattern
+    .replace(/[aàâäá]/gi, charMap.a)
+    .replace(/[eéèêë]/gi, charMap.e)
+    .replace(/[iîïí]/gi, charMap.i)
+    .replace(/[oôöó]/gi, charMap.o)
+    .replace(/[uùûüú]/gi, charMap.u)
+    .replace(/[cç]/gi, charMap.c);
+};
+
 export const getAllProperties = async (filters = {}) => {
   const {
     city,
@@ -39,10 +81,11 @@ export const getAllProperties = async (filters = {}) => {
 
   const query = {};
 
-  // Search by city
+  // Search by city (accent-insensitive & alias-aware)
   if (city) {
+    const cityPattern = buildAccentInsensitiveRegex(city);
     query["location.city"] = {
-      $regex: city,
+      $regex: cityPattern,
       $options: "i",
     };
   }

@@ -1,7 +1,11 @@
-import React from "react";
-import { Filter, X, RotateCcw } from "lucide-react";
+import React, { useState } from "react";
+import { Filter, X, RotateCcw, Search } from "lucide-react";
+import {
+  POPULAR_CITIES,
+  MOROCCO_LOCATIONS,
+  normalizeText,
+} from "../constants/moroccoLocations";
 
-const CITIES = ["Casablanca", "Marrakech", "Rabat", "Tangier", "Agadir"];
 const PROPERTY_TYPES = [
   { label: "Apartment", value: "Apartment" },
   { label: "Villa", value: "Villa" },
@@ -19,6 +23,8 @@ const PropertyFilters = ({
   onClose,
   isMobile = false,
 }) => {
+  const [citySearch, setCitySearch] = useState("");
+
   const handleCityChange = (city) => {
     onChange({ ...filters, city: filters.city === city ? "" : city, page: 1 });
   };
@@ -47,6 +53,14 @@ const PropertyFilters = ({
     });
   };
 
+  // Filter Moroccan cities for search box inside filter panel
+  const searchedCities = citySearch.trim()
+    ? MOROCCO_LOCATIONS.filter((l) =>
+        normalizeText(l.city).includes(normalizeText(citySearch)) ||
+        normalizeText(l.region).includes(normalizeText(citySearch))
+      ).slice(0, 10)
+    : [];
+
   const content = (
     <div className="space-y-6">
       {/* Header */}
@@ -67,32 +81,121 @@ const PropertyFilters = ({
 
       {/* City Filter */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-text-main mb-3">
-          City
-        </label>
-        <div className="space-y-2">
-          {CITIES.map((c) => {
-            const isSelected = filters.city?.toLowerCase() === c.toLowerCase();
-            return (
-              <label
-                key={c}
-                className="flex items-center justify-between text-sm text-text-main cursor-pointer hover:text-primary transition-colors py-0.5"
-              >
-                <div className="flex items-center gap-2.5">
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => handleCityChange(c)}
-                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary cursor-pointer"
-                  />
-                  <span className={isSelected ? "font-semibold text-primary" : ""}>
-                    {c}
-                  </span>
-                </div>
-              </label>
-            );
-          })}
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-text-main">
+            Moroccan City
+          </label>
+          {filters.city && (
+            <button
+              type="button"
+              onClick={() => handleCityChange(filters.city)}
+              className="text-[11px] text-error font-semibold hover:underline"
+            >
+              Clear city
+            </button>
+          )}
         </div>
+
+        {/* Search any Moroccan city */}
+        <div className="relative mb-3">
+          <Search className="w-3.5 h-3.5 text-text-secondary absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={citySearch}
+            onChange={(e) => setCitySearch(e.target.value)}
+            placeholder="Search any Moroccan city..."
+            className="w-full pl-8 pr-7 py-1.5 rounded-xl border border-border bg-background text-xs text-text-main placeholder:text-text-secondary/70 focus:bg-surface focus:border-primary focus:outline-none"
+          />
+          {citySearch && (
+            <button
+              type="button"
+              onClick={() => setCitySearch("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-main"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* If searching, show search matches */}
+        {citySearch.trim() ? (
+          <div className="space-y-1 max-h-40 overflow-y-auto">
+            {searchedCities.length === 0 ? (
+              <p className="text-xs text-text-secondary py-2 text-center">
+                No matching city
+              </p>
+            ) : (
+              searchedCities.map((l) => (
+                <button
+                  key={l.city}
+                  type="button"
+                  onClick={() => {
+                    handleCityChange(l.city);
+                    setCitySearch("");
+                  }}
+                  className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors ${
+                    filters.city?.toLowerCase() === l.city.toLowerCase()
+                      ? "bg-primary text-white font-bold"
+                      : "hover:bg-background text-text-main"
+                  }`}
+                >
+                  <span className="font-semibold">{l.city}</span>
+                  <span className="text-[10px] opacity-75">{l.region}</span>
+                </button>
+              ))
+            )}
+          </div>
+        ) : (
+          /* Popular cities checkboxes */
+          <div className="space-y-2">
+            {/* If a non-popular city is currently selected, display it at top */}
+            {filters.city &&
+              !POPULAR_CITIES.some(
+                (c) => c.toLowerCase() === filters.city.toLowerCase()
+              ) && (
+                <label className="flex items-center justify-between text-sm text-text-main cursor-pointer py-0.5 bg-primary-light/30 px-2 rounded-lg">
+                  <div className="flex items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={true}
+                      onChange={() => handleCityChange(filters.city)}
+                      className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary cursor-pointer"
+                    />
+                    <span className="font-semibold text-primary">
+                      📍 {filters.city} (Selected)
+                    </span>
+                  </div>
+                </label>
+              )}
+
+            {POPULAR_CITIES.slice(0, 7).map((c) => {
+              const isSelected =
+                filters.city?.toLowerCase() === c.toLowerCase();
+              return (
+                <label
+                  key={c}
+                  className="flex items-center justify-between text-sm text-text-main cursor-pointer hover:text-primary transition-colors py-0.5"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => handleCityChange(c)}
+                      className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary cursor-pointer"
+                    />
+                    <span
+                      className={
+                        isSelected ? "font-semibold text-primary" : ""
+                      }
+                    >
+                      {c}
+                    </span>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Property Type Filter */}

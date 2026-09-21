@@ -16,16 +16,9 @@ import {
 import { getProperties } from "../features/properties/propertyThunks";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
-import { getFavorites } from "../features/favorites/favoriteThunks";
+import { POPULAR_CITIES as ALL_POPULAR_CITIES } from "../constants/moroccoLocations";
 
-const POPULAR_CITIES = [
-  "All Morocco",
-  "Casablanca",
-  "Marrakech",
-  "Rabat",
-  "Tangier",
-  "Agadir",
-];
+const POPULAR_CITIES = ["All Morocco", ...ALL_POPULAR_CITIES];
 
 const Properties = () => {
   const dispatch = useDispatch();

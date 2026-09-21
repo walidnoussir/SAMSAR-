@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { getProperties } from "../features/properties/propertyThunks";
 import PropertyCard from "../components/PropertyCard";
-import { getFavorites } from "../features/favorites/favoriteThunks";
+import { MOROCCO_LOCATIONS, POPULAR_CITIES } from "../constants/moroccoLocations";
 
 const CITIES = [
   {
@@ -172,12 +172,21 @@ const Home = () => {
                     onChange={(e) => setCityInput(e.target.value)}
                     className="w-full bg-transparent text-xs font-semibold text-text-main focus:outline-none pt-0.5 cursor-pointer"
                   >
-                    <option value="">Where to live?</option>
-                    <option value="Casablanca">Casablanca</option>
-                    <option value="Marrakech">Marrakech</option>
-                    <option value="Rabat">Rabat</option>
-                    <option value="Tangier">Tangier</option>
-                    <option value="Agadir">Agadir</option>
+                    <option value="">Where to live? (All Morocco)</option>
+                    <optgroup label="Popular Moroccan Cities">
+                      {POPULAR_CITIES.map((c) => (
+                        <option key={`pop-${c}`} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="All Moroccan Cities & Places">
+                      {MOROCCO_LOCATIONS.map((l) => (
+                        <option key={`all-${l.city}`} value={l.city}>
+                          {l.city} ({l.region})
+                        </option>
+                      ))}
+                    </optgroup>
                   </select>
                 </div>
 
