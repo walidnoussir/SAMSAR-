@@ -98,13 +98,13 @@ samsar/
     └── reservations.png
 ```
 
-| Home Page                       | Property Listing                               |
-| ------------------------------- | ---------------------------------------------- |
-| ![Home](./screenshots/home.png) | ![Listing](./screenshots/property-listing.png) |
+| Home Page                       | Property Listing                                   |
+| ------------------------------- | -------------------------------------------------- |
+| ![Home](./screenshots/home.png) | ![Listing](./screenshots/property-listing.png.png) |
 
-| Property Details                               | Owner Dashboard                                 |
-| ---------------------------------------------- | ----------------------------------------------- |
-| ![Details](./screenshots/property-details.png) | ![Dashboard](./screenshots/owner-dashboard.png) |
+| Property Details                                   | Owner Dashboard                                     |
+| -------------------------------------------------- | --------------------------------------------------- |
+| ![Details](./screenshots/property-details.png.png) | ![Dashboard](./screenshots/owner-dashboard.png.png) |
 
 ---
 
