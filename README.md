@@ -84,20 +84,6 @@ The backend is a REST API built with Express 5 and MongoDB (via Mongoose), secur
 
 ## 📸 Screenshots
 
-> Add your application screenshots here to give visitors a visual preview of Samsar.
-
-Create a `screenshots/` folder at the root of the repository and reference the images below:
-
-```
-samsar/
-└── screenshots/
-    ├── home.png
-    ├── property-listing.png
-    ├── property-details.png
-    ├── owner-dashboard.png
-    └── reservations.png
-```
-
 | Home Page                       | Property Listing                                   |
 | ------------------------------- | -------------------------------------------------- |
 | ![Home](./screenshots/home.png) | ![Listing](./screenshots/property-listing.png.png) |
