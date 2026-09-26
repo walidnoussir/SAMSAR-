@@ -26,7 +26,9 @@ const EditProperty = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
-  const { property, loading: fetching } = useSelector((state) => state.properties);
+  const { property, loading: fetching } = useSelector(
+    (state) => state.properties,
+  );
 
   const [loading, setLoading] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
@@ -220,7 +222,9 @@ const EditProperty = () => {
 
             {/* Status toggle */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-text-secondary">Status:</span>
+              <span className="text-xs font-semibold text-text-secondary">
+                Status:
+              </span>
               <select
                 name="status"
                 value={formData.status}
@@ -305,7 +309,9 @@ const EditProperty = () => {
 
         {/* Specs */}
         <div className="bg-surface p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-5">
-          <h2 className="text-lg font-bold text-text-main">Layout Specifications</h2>
+          <h2 className="text-lg font-bold text-text-main">
+            Layout Specifications
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-text-main mb-1.5">
@@ -426,7 +432,8 @@ const EditProperty = () => {
               <span>Property Photography (Cloudinary)</span>
             </h2>
             <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary-light text-primary-dark">
-              {formData.images.length} Image{formData.images.length !== 1 ? "s" : ""}
+              {formData.images.length} Image
+              {formData.images.length !== 1 ? "s" : ""}
             </span>
           </div>
 
@@ -462,24 +469,6 @@ const EditProperty = () => {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <input
-              type="url"
-              value={imageUrlInput}
-              onChange={(e) => setImageUrlInput(e.target.value)}
-              placeholder="Add image URL (https://...)"
-              className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-text-main focus:bg-surface focus:border-primary focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={handleAddImageUrl}
-              className="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add URL</span>
-            </button>
-          </div>
-
           {formData.images.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
               {formData.images.map((imgUrl, idx) => (
@@ -511,7 +500,9 @@ const EditProperty = () => {
           ) : (
             <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>No images remaining. Please upload at least one image.</span>
+              <span>
+                No images remaining. Please upload at least one image.
+              </span>
             </div>
           )}
         </div>
